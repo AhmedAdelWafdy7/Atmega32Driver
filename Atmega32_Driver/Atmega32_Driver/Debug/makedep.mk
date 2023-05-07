@@ -10,5 +10,7 @@ main.c
 
 MCAL\GPIO\GPIO.c
 
+MCAL\Timer0\Timer0.c
+
 MCAL\USART\usart.c
 

@@ -1,4 +1,5 @@
-main.d main.o: .././main.c ../MCAL/Timer0/Timer0.h ../MemoryMap.h \
+MCAL/Timer0/Timer0.d MCAL/Timer0/Timer0.o: ../MCAL/Timer0/Timer0.c \
+ ../MCAL/Timer0/Timer0.h ../MemoryMap.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stdint.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\stdint.h \
  ../Utilities.h \

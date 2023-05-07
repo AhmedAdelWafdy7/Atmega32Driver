@@ -8,7 +8,11 @@
 
 #ifndef MEMORYMAP_H_
 #define MEMORYMAP_H_
+#include "stdint.h"
 
+#define IO_MAPPING_OFFSET	0x20
+#define FLASH_MEMORY		0x00
+#define SRAM				0x60
 //GPIO Registers
 #define DDRA	*((volatile unsigned char*)0x3A)
 #define PORTA	*((volatile unsigned char*)0x3B)
@@ -45,6 +49,49 @@
 #define INTF1 7
 #define INTF0 6
 #define INTF2 5
+
+
+
+#define TIMER0_Base			0x23
+
+#define TIFR_Base			0x36	
+#define TIMSK_Base			0x37	
+
+typedef struct
+{
+	volatile uint8_t OCR0_;		
+	
+	
+	volatile uint8_t TCNT0_;		
+	
+	
+	volatile union
+	{
+		volatile uint8_t TCCR0_;	
+		struct
+		{
+			volatile uint8_t CS0n_	    	    :3;		
+			volatile uint8_t WGM01_			:1;		
+			volatile uint8_t COM0n_				:2;		
+			volatile uint8_t WGM00_				:1;		
+			volatile uint8_t FOC0_				:1;		
+		}bits;
+	}TCCR0_;
+	
+}TIMER0_t;
+
+#define TIMSK			(*(vuint8_t*)(TIMSK_Base + IO_MAPPING_OFFSET))
+
+#define TOIE0			0	
+#define OCIE0			1
+
+#define TIFR			(*(vuint8_t*)(TIFR_Base + IO_MAPPING_OFFSET))
+
+#define TOV0			0	/* Timer/Counter0 Overflow Flag */
+#define OCF0			1	/* Output Compare Flag 0 */
+
+#define TIMER0			((TIMER0_t*) (TIMER0_Base + IO_MAPPING_OFFSET))
+
 
 //-----------------------------
 //USART Registers
@@ -116,5 +163,21 @@
 #define UCSZ0			1
 //Bit 0 – UCPOL: Clock Polarity
 #define UCPOL			0
+
+
+
+/*///////////////////////////////////////////////
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+///////////// interrupt functions \\\\\\\\\\\\\\\\
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+////////////////////////////////////////////////////*/
+
+
+#define SREG_Base		0x3F
+#define SREG			(*(uint8_t*)(SREG_Base + IO_MAPPING_OFFSET))
+#define I_Bit			7
+
+#define Enable_G_Interrupt()	SREG |= (1 << I_Bit)
+#define Disable_G_Interrupt()	SREG &= ~(1 << I_Bit)
 
 #endif /* MEMORYMAP_H_ */
