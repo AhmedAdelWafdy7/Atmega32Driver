@@ -13,6 +13,12 @@
 #define IO_MAPPING_OFFSET	0x20
 #define FLASH_MEMORY		0x00
 #define SRAM				0x60
+
+#define TIMER0_Base			0x23
+
+#define TIFR_Base			0x36
+#define TIMSK_Base			0x37
+
 //GPIO Registers
 #define DDRA	*((volatile unsigned char*)0x3A)
 #define PORTA	*((volatile unsigned char*)0x3B)
@@ -39,23 +45,19 @@
 #define ISC01 1
 #define ISC10 2
 #define ISC11 3
+#define GICR    (*(volatile unsigned char*)0x5B)
+#define GIFR	(*(volatile unsigned char*)0x5A)
 
-#define GICR     (*(volatile unsigned char*)0x5B)
-#define INT1 7
-#define INT0 6
-#define INT2 5
+//ADC
 
-#define GIFR    (*(volatile unsigned char*)0x5A)
-#define INTF1 7
-#define INTF0 6
-#define INTF2 5
+#define ADMUX	(*(volatile unsigned char*)0x27)
+#define ADCSRA	(*(volatile unsigned char*)0x26)
+#define SFIOR	(*(volatile unsigned char*)0x50)
+#define ADCL	(*(volatile unsigned char*)0x24)
+#define ADCH	(*(volatile unsigned char*)0x25)
 
 
-
-#define TIMER0_Base			0x23
-
-#define TIFR_Base			0x36	
-#define TIMSK_Base			0x37	
+	
 
 typedef struct
 {

@@ -5,29 +5,33 @@
  * Author : Ahmed Adel Wafdy
  */ 
 
-#include "Timer0.h"
+#include "ADC.h"
+#include "lcd.h"
 #define F_CPU 8000000UL
 
-uint32_t Timer_Counter = 0;
-
+uint32_t ADC_Data;
+uint32_t Temp;
 
 int main(void)
 {
-
-	SET_BIT(DDRB,3);
+	lcd_init();
+	ADC_Config_t adc_cfg;
+	adc_cfg.ADC_Mode =ADC_MODE_SINGLE_CONVERSION;
+	adc_cfg.ADC_Prescaler = ADC_PRESCALER_64;
+	adc_cfg.ADC_Res_presentation = ADC_RES_PRESENTATION_LEFT_ADJUSTED;
+	adc_cfg.ADC_Volt_Ref = ADC_VOLT_REF_AVCC;
+	adc_cfg.ADC_IRQ_Enable = ADC_IRQ_ENABLE_NONE;
+	adc_cfg.P_CallBack = NULL;
 	
-	TIMER0_Config_t TMR_CFG;
-	
-	TMR_CFG.Timer_Mode = TIMER0_MODE_FAST_PWM_INVERTING;
-	TMR_CFG.Clock_Source = TIMER0_CLOCK_SOURCE_INTERNAL_PRESCALER_8;
-	TMR_CFG.IRQ_Enable = TIMER0_IRQ_ENABLE_NONE;
-	TMR_CFG.P_IRQ_CallBack = NULL;
-	
-	MCAL_TIMER0_Init(&TMR_CFG);
-    /* Replace with your application code */
-    while (1) 
-    {
-		MCAL_PWM_DutyCycle(100);
-    }
+	MCAL_ADC_Init(&adc_cfg);
+	while(1){
+	MCAL_ADC_Get_Result(ADC1,&ADC_Data,ADC_ENABLE);
+	Temp  =(((ADC_Data *5000) / 1024) /10);
+	lcd_send_string("Temp: ");
+	lcd_send_number(Temp);
+	lcd_send_string(" C");
+	_delay_ms(1000);
+	lcd_clear();
+	}
 }
 
