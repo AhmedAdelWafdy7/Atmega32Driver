@@ -19,9 +19,10 @@
 #define TIMSK_Base			0x37
 
 #define USART_Base			0x09	
-	
 #define UCSRC_Base			0x20	
 #define UBRRH_Base			0x20	
+
+#define SPI_Base			0x0D	
 
 
 
@@ -156,10 +157,42 @@ typedef struct{
 #define UMSEL			6	
 #define URSEL			7	
 
-/* 
- * USART Baud Rate Register High , Address Offset: 0x20 
- */
 #define UBRRH			(*(volatile uint8_t*)(UBRRH_Base + IO_MAPPING_OFFSET))
+
+//SPI
+typedef struct
+{
+	volatile union
+	{
+		volatile uint8_t SPCR;	
+		struct
+		{
+			volatile uint8_t SPR0	    :1;		
+			volatile uint8_t SPR1	:1;	
+			volatile uint8_t CPHA		:1;		
+			volatile uint8_t CPOL		:1;		
+			volatile uint8_t MSTR		:1;		
+			volatile uint8_t DORD	    :1;		
+			volatile uint8_t SPE		:1;		
+			volatile uint8_t SPIE		:1;		
+		}bits;
+	}SPCR;
+		
+	volatile union
+	{
+		volatile uint8_t SPSR;		
+		struct
+		{
+			volatile uint8_t SPI2X   :1;	
+			volatile uint8_t Reversed	:5;	
+			volatile uint8_t WCOL	:1;	
+			volatile uint8_t SPIF		:1;		
+		}bits;
+	}SPSR;
+	volatile uint8_t SPDR;		
+}SPI_t;
+
+#define SPI				((SPI_t*) (SPI_Base + IO_MAPPING_OFFSET))
 
 /*///////////////////////////////////////////////
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -176,7 +209,8 @@ void vector (void)
 #define USART_UDRE_vect			__vector_14
 /* USART, Tx Complete */
 #define USART_TXC_vect			__vector_15
-
+/* Serial Transfer Complete */
+#define SPI_STC_vect			__vector_12
 #define SREG_Base		0x3F
 #define SREG			(*(uint8_t*)(SREG_Base + IO_MAPPING_OFFSET))
 #define I_Bit			7

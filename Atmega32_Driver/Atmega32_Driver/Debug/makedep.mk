@@ -12,6 +12,8 @@ MCAL\ADC\ADC.c
 
 MCAL\GPIO\GPIO.c
 
+MCAL\SPI\SPI.c
+
 MCAL\Timer0\Timer0.c
 
 MCAL\USART\usart.c
