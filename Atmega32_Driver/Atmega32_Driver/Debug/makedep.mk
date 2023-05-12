@@ -8,6 +8,8 @@ HAL\LCD_Driver\lcd.c
 
 main.c
 
+MCAL\ADC\ADC.c
+
 MCAL\GPIO\GPIO.c
 
 MCAL\Timer0\Timer0.c

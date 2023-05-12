@@ -15,9 +15,15 @@
 #define SRAM				0x60
 
 #define TIMER0_Base			0x23
-
 #define TIFR_Base			0x36
 #define TIMSK_Base			0x37
+
+#define USART_Base			0x09	
+	
+#define UCSRC_Base			0x20	
+#define UBRRH_Base			0x20	
+
+
 
 //GPIO Registers
 #define DDRA	*((volatile unsigned char*)0x3A)
@@ -82,12 +88,12 @@ typedef struct
 	
 }TIMER0_t;
 
-#define TIMSK			(*(vuint8_t*)(TIMSK_Base + IO_MAPPING_OFFSET))
+#define TIMSK			(*(volatile uint8_t*)(TIMSK_Base + IO_MAPPING_OFFSET))
 
 #define TOIE0			0	
 #define OCIE0			1
 
-#define TIFR			(*(vuint8_t*)(TIFR_Base + IO_MAPPING_OFFSET))
+#define TIFR			(*(volatile uint8_t*)(TIFR_Base + IO_MAPPING_OFFSET))
 
 #define TOV0			0	/* Timer/Counter0 Overflow Flag */
 #define OCF0			1	/* Output Compare Flag 0 */
@@ -99,81 +105,77 @@ typedef struct
 //USART Registers
 //-----------------------------
 
-//USART I/O Data Register – UDR
-#define UDR		*((volatile unsigned char*)0x2C)
+typedef struct{
+	
+	volatile uint8_t UBRRL;		
+	
+	volatile union {
+		volatile uint8_t UCSRB;
+		struct {
+			volatile uint8_t TXB8	  :1;		
+			volatile uint8_t RXB8 	  :1;		
+			volatile uint8_t UCSZ2   :1;	
+			volatile uint8_t TXEN   :1;		
+			volatile uint8_t RXEN   :1;		
+			volatile uint8_t UDRIE   :1;	
+			volatile uint8_t TXCIE   :1;		
+			volatile uint8_t RXCIE   :1;		
+		}bits;
+	}UCSRB;
+		
+	volatile union
+	{
+		volatile uint8_t UCSRA_;		
+		struct
+		{
+			volatile uint8_t MPCM	    :1;		
+			volatile uint8_t U2X		:1;		
+			volatile uint8_t PE		:1;		
+			volatile uint8_t DOR		:1;		
+			volatile uint8_t FE	:1;		
+			volatile uint8_t UDRE	    :1;		
+			volatile uint8_t TXC		:1;		
+			volatile uint8_t RXC		:1;	
+		}bits;
+	}UCSRA;
+	
+	
+	volatile uint8_t UDR;			
+	
+}USART_t;
+#define USART			((USART_t*) (USART_Base + IO_MAPPING_OFFSET))
 
-//USART Control and Status Register A –UCSRA
-#define UCSRA	*((volatile unsigned char*)0x2B)
-//USART Control and Status Register B – UCSRB
-#define UCSRB	*((volatile unsigned char*)0x2A)
-//USART Control and Status Register C – UCSRC
-//The UBRRH Register shares the same I/O location as the UCSRC Register
-#define UCSRC	*((volatile unsigned char*)0x40)
-#define UBRRH	*((volatile unsigned char*)0x40)
-//USART Baud Rate Registers – UBRRL and UBRRH
-#define UBRRL	*((volatile unsigned char*)0x29)
-//USART BITS MACROS
+#define UCSRC			(*(volatile uint8_t*)(UCSRC_Base + IO_MAPPING_OFFSET))
 
-//UCSRA
-// Bit 7 – RXC: USART Receive Complete
-#define RXC			7
-//Bit 6 – TXC: USART Transmit Complete
-#define TXC			6
-//Bit 5 – UDRE: USART Data Register Empty
-#define UDRE		5
-//Bit 4 – FE: Frame Error
-#define FE			4
-//Bit 3 – DOR: Data OverRun
-#define DOR			3
-// Bit 2 – PE: Parity Error
-#define PE			2
-//Bit 1 – U2X: Double the USART Transmission Speed
-#define U2X			1
-//Bit 0 – MPCM: Multi-processor Communication Mode
-#define MPCM		0
+#define UCPOL			0	
+#define UCSZ0			1	
+#define UCSZ1			2	
+#define USBS			3	
+#define UPM0			4	
+#define UPM1			5	
+#define UMSEL			6	
+#define URSEL			7	
 
-//UCSRB
-//Bit 7 – RXCIE: RX Complete Interrupt Enable
-#define RXCIE			7
-// Bit 6 – TXCIE: TX Complete Interrupt Enable
-#define TXCIE			6
-//Bit 5 – UDRIE: USART Data Register Empty Interrupt Enable
-#define UDRIE			5
-//Bit 4 – RXEN: Receiver Enable
-#define RXEN			4
-//Bit 3 – TXEN: Transmitter Enable
-#define TXEN			3
-//Bit 2 – UCSZ2: Character Size
-#define UCSZ2			2
-//Bit 1 – RXB8: Receive Data Bit 8
-#define RXB8			1
-// Bit 0 – TXB8: Transmit Data Bit 8
-#define TXB8			0
-
-//UCSRC
-// Bit 7 – URSEL: Register Select
-#define URSEL			7
-//Bit 6 – UMSEL: USART Mode Select
-#define UMSEL			6
-//Bit 5:4 – UPM1:0: Parity Mode
-#define UPM1			5
-#define UPM0			4
-//Bit 3 – USBS: Stop Bit Select
-#define USBS			3
-// Bit 2:1 – UCSZ1:0: Character Size
-#define UCSZ1			2
-#define UCSZ0			1
-//Bit 0 – UCPOL: Clock Polarity
-#define UCPOL			0
-
-
+/* 
+ * USART Baud Rate Register High , Address Offset: 0x20 
+ */
+#define UBRRH			(*(volatile uint8_t*)(UBRRH_Base + IO_MAPPING_OFFSET))
 
 /*///////////////////////////////////////////////
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 ///////////// interrupt functions \\\\\\\\\\\\\\\\
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 ////////////////////////////////////////////////////*/
+#define ISR(vector,...)            \
+void vector (void) __attribute__ ((signal))__VA_ARGS__ ; \
+void vector (void)
 
+/* USART, Rx Complete */
+#define USART_RXC_vect			__vector_13
+/* USART Data Register Empty */
+#define USART_UDRE_vect			__vector_14
+/* USART, Tx Complete */
+#define USART_TXC_vect			__vector_15
 
 #define SREG_Base		0x3F
 #define SREG			(*(uint8_t*)(SREG_Base + IO_MAPPING_OFFSET))
