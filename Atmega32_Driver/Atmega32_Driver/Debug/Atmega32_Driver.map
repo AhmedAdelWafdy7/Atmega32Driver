@@ -140,6 +140,27 @@ Discarded input sections
  .debug_str     0x00000000      0x29b MCAL/GPIO/GPIO.o
  .comment       0x00000000       0x31 MCAL/GPIO/GPIO.o
  .debug_frame   0x00000000       0xa4 MCAL/GPIO/GPIO.o
+ .text          0x00000000        0x0 MCAL/I2C/I2C.o
+ .data          0x00000000        0x0 MCAL/I2C/I2C.o
+ .bss           0x00000000        0x0 MCAL/I2C/I2C.o
+ .text.MCAL_I2C_Init
+                0x00000000       0x26 MCAL/I2C/I2C.o
+ .text.MCAL_I2C_Start
+                0x00000000       0x12 MCAL/I2C/I2C.o
+ .text.MCAL_I2C_Write
+                0x00000000        0xe MCAL/I2C/I2C.o
+ .text.MCAL_I2C_Stop
+                0x00000000        0x6 MCAL/I2C/I2C.o
+ .debug_info    0x00000000       0xed MCAL/I2C/I2C.o
+ .debug_abbrev  0x00000000       0x7a MCAL/I2C/I2C.o
+ .debug_loc     0x00000000       0x6f MCAL/I2C/I2C.o
+ .debug_aranges
+                0x00000000       0x38 MCAL/I2C/I2C.o
+ .debug_ranges  0x00000000       0x28 MCAL/I2C/I2C.o
+ .debug_line    0x00000000      0x119 MCAL/I2C/I2C.o
+ .debug_str     0x00000000      0x1bd MCAL/I2C/I2C.o
+ .comment       0x00000000       0x31 MCAL/I2C/I2C.o
+ .debug_frame   0x00000000       0x54 MCAL/I2C/I2C.o
  .text          0x00000000        0x0 MCAL/SPI/SPI.o
  .data          0x00000000        0x0 MCAL/SPI/SPI.o
  .bss           0x00000000        0x0 MCAL/SPI/SPI.o
@@ -421,6 +442,7 @@ LOAD HAL/LCD_Driver/lcd.o
 LOAD main.o
 LOAD MCAL/ADC/ADC.o
 LOAD MCAL/GPIO/GPIO.o
+LOAD MCAL/I2C/I2C.o
 LOAD MCAL/SPI/SPI.o
 LOAD MCAL/Timer0/Timer0.o
 LOAD MCAL/USART/usart.o

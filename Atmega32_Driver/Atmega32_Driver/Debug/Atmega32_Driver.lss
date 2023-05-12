@@ -658,9 +658,9 @@ void MCAL_ADC_Get_Result(Channel_Select_t channel,uint16_t *data,Polling_Mechani
  408:	08 95       	ret
 
 0000040a <__vector_12>:
-
-	*data = SPI->SPDR ;
 }
+
+
 
 ISR(SPI_STC_vect)
 {

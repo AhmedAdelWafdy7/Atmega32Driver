@@ -24,6 +24,19 @@
 
 #define SPI_Base			0x0D	
 
+//I2C
+#define TWBR (*(volatile unsigned char*)0x20)
+#define TWSR (*(volatile unsigned char*)0x21)
+#define TWAR (*(volatile unsigned char*)0x22)
+#define TWDR (*(volatile unsigned char*)0x23)
+#define TWCR     (*(volatile unsigned char*)0x56)
+
+#define TWINT		7
+#define TWEA		6
+#define TWSTA		5
+#define TWSTO		4
+#define TWWC		3
+#define TWEN		2
 
 
 //GPIO Registers
